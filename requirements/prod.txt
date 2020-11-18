@@ -1,0 +1,7 @@
+argparse
+pymongo
+pprint
+firebase-admin
+google-cloud-firestore
+boto3
+elasticsearch-dsl>=7.0.0,<8.0.0

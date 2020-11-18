@@ -1,0 +1,6 @@
+-r dev.txt
+
+pytest
+mock
+pytest_mock
+freezegun
