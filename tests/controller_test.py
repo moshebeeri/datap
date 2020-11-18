@@ -18,8 +18,4 @@ class TestControl:
     builder.add_transform('3', None)
     order = builder.transform(None)
     assert order == ['1', '2', '3']
-
-
-
-
-    
+  

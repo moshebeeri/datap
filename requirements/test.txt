@@ -4,3 +4,5 @@ pytest
 mock
 pytest_mock
 freezegun
+elasticmock
+mongomock
