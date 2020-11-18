@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
-from data import Data
+from data.data import Data
 
 class Service(ABC):
 
-  def __init__(self, from, to, chunk_size=1024):
+  def __init__(self, start, end, chunk_size=1024):
     super().__init__()
 
   @abstractmethod
