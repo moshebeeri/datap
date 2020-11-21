@@ -26,14 +26,15 @@ class ElasticService:
 
 class TestControl(unittest.TestCase):
 
-  def populateMany(json_store):
+  def populate_many(self, json_store):
     objects = []
     for i in range(100):
-      objects.append({
+      obj = {
         'some_field' : i,
-        'timestamp': datetime.now()
-      })
-    json_store.insert_many(objects)
+        'timestamp':  datetime.now()
+      }
+      objects.append(obj)  
+    return json_store.insert_many(objects)
 
   def populate_json_store(self, json_store):
     objects = []
@@ -68,8 +69,12 @@ class TestControl(unittest.TestCase):
   @elasticmock
   def test_transfer_mongo_to_elastic_(self):
     control = Control({'retryable': False})
-    mongodb = MongoDB(connection = 'mongodb://example.com:27017/')
+    mongodb = MongoDB(connection = 'example.com')
+    #mongodb.db_collection().insert_many([dict(votes=1), dict(votes=2)])
+    self.populate_many(mongodb.db_collection())
+
     control = control.add_source(mongodb).add_destination(Elasticsearch())
     assert control != None
     data = control.run()
-    assert data != None
+    docs = data.get_docs()
+    assert len(docs) == 100

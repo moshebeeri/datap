@@ -266,7 +266,7 @@ def updateProjectExec(project, path="json/data"):
   now = datetime.now(tz.tzutc())
   today = datetime(
       now.year, now.month, now.day, minute=0, second=0, microsecond=0, tzinfo=tz.tzutc())
-  client.[database].exporterProjects.update_one({"_id": project["_id"]},
+  client[database].exporterProjects.update_one({"_id": project["_id"]},
                                              {"$set": {
                                                 "ended": datetime.now(tz.tzutc()),
                                                 "to": today - timedelta(days=project["days_to_keep"]),

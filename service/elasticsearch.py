@@ -5,8 +5,9 @@ from projects import Job
 
 class Elasticsearch(Service):
   
-  def __init__(self, index='default'):
+  def __init__(self, index='default', connection=[{'host': 'localhost', 'port': 9200}]):
     self.index = index
+    self.connect()
 
   def connect(self, connection=[{'host': 'localhost', 'port': 9200}]):
     self.es = elasticsearch.Elasticsearch(hosts=[{'host': 'localhost', 'port': 9200}])
