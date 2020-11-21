@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from data.data import Data
+from projects import Job
 
 class Service(ABC):
 
@@ -7,13 +8,13 @@ class Service(ABC):
     super().__init__()
 
   @abstractmethod
-  def connect(self, connection_string):
+  def connect(self, connection):
     pass
 
   @abstractmethod
-  def read(self, address) -> Data:
+  def read(self, job: Job) -> Data:
     pass
   
   @abstractmethod
-  def write(self, data: Data) -> Data:
+  def write(self, data: Data, job: Job) -> Data:
     pass

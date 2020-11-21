@@ -28,8 +28,6 @@ from firebase_admin import firestore
 import argparse
 from elasticsearch import Elasticsearch
 
-es = Elasticsearch()
-
 dry_run = False
 collection = None
 database = None
