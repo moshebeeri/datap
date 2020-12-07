@@ -1,11 +1,11 @@
-from .project import Project
+from .projects import Projects
 
 class Job():
-  def __init__(self, project: Project):
-    self.project = project
+  def __init__(self, projects: Projects):
+    self.projects = projects
   
   def __init__(self):
-    self.project = project
+    self.projects = projects
   
-  def getProject(self) -> Project:
-    return self.project
+  def getProjects(self) -> Projects:
+    return self.projects

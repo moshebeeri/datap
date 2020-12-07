@@ -1,2 +1,2 @@
-from .project import *
+from .projects import *
 from .job import *

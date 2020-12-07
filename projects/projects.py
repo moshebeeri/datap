@@ -3,17 +3,17 @@
 import datetime
 from dateutil import tz
 from _datetime import timedelta
+import json
 
-class Project():
-  def __init__(self, mongodb_client, projectId):
+class Projects():
+  def __init__(self, mongodb_client, client_id):
     # mongodb.findbyId(project)
     self.client = mongodb_client
     self.database = self.client['operational']
     self.collection = self.database['projects']
+    self.client_id = client_id
+    self.activate_projects = self.get_projects(client_id)
 
-  def __init__(self, project):
-    self.project = project
-  
   def get_projects(self, client_id, active_only=True):
     creteria = {'client_id': client_id, 'active': active_only} if active_only else {'client_id': client_id}
     projects = self.collection.find(creteria)
@@ -26,8 +26,8 @@ class Project():
                'source':source,
                'destination': destination
               }
-    created = self.collection.create(project)
-    return created
+    _id = self.collection.insert_one(project).inserted_id
+    return str(_id)
 
   def update_project_exec(self, project):
     now = datetime.now(tz.tzutc())
@@ -41,15 +41,20 @@ class Project():
                                   }})
 
   def halt_project(self, project_id):
-    self.collection.update_one({'_id': project['_id']},
+    self.collection.update_one({'_id': project_id},
                                   {'$set': {
                                       'status': 'halt',
                                       'active': False
                                   }})
 
   def activate_project(self, project_id):
-    self.collection.update_one({'_id': project['_id']},
+    self.collection.update_one({'_id': project_id},
                                   {'$set': {
                                       'status': 'active',
                                       'active': True
                                   }})
+  def get_next_jobs(self, project_id):
+    pass
+
+  def get_last_jobs(self, project_id):
+    pass
