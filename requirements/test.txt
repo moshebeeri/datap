@@ -6,3 +6,4 @@ pytest_mock
 freezegun
 elasticmock
 mongomock
+mock-firestore

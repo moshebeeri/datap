@@ -6,7 +6,9 @@ from elasticmock import elasticmock
 from datetime import datetime
 from freezegun import freeze_time
 from datetime import datetime
+from datetime import timedelta
 import pymongo
+from mockfirestore import MockFirestore
 
 class TestProjects:
 
@@ -14,40 +16,71 @@ class TestProjects:
   @mongomock.patch(servers=(('example.com', 27017),))
   def mongodb_client(self):
     return pymongo.MongoClient('example.com')
-    
+  
+  @pytest.fixture(scope="session", autouse=True)
+  def firestore(self):
+    return MockFirestore()
+
+  @freeze_time("2020-11-11 00:00:00")
   @mongomock.patch(servers=(('example.com', 27017),))
-  def test_projects(self, mongodb_client):
-    clientId = "client1"
-    projects = Projects(mongodb_client, clientId)
-    project_id = projects.create_project(clientId, {
+  def test_projects(self, firestore):
+    userId = "user1"
+    projects = Projects(firestore, userId)
+    start = datetime.now() - timedelta(days=3)
+    ref = projects.create_project(userId, {
       'type': 'mongodb',
       'host': 'example.com',
       'port': 27017,
       'user': 'admin',
       'password': 'password'
-    }, {
-      'type': 'elasticsearch',
-      'host': 'elastic.com',
-      'user': 'admin',
-      'password': 'password'
-    })
-    assert project_id
-    returns = projects.get_projects(clientId)
-    assert len(returns) == 1
+      }, {
+        'type': 'elasticsearch',
+        'host': 'elastic.com',
+        'user': 'admin',
+        'password': 'password'
+      },
+      start=start,
+      seconds_to_keep=12 * 60 * 60
+    )
+    assert ref
+    returns = projects.get_projects(userId)
+    assert len(list(returns)) == 1
 
+  def test_get_projects(self, firestore):
+    userId = "user1"
+    projects = Projects(firestore, userId)
+    active = projects.get_projects(userId)
+    assert len(list(active)) == 1
 
-  @mongomock.patch(servers=(('example.com', 27017),))
-  def test_get_projects(self, mongodb_client):
-    clientId = "client1"
-    projects = Projects(mongodb_client, clientId)
-    active = projects.get_projects(clientId)
-    assert len(active) == 1
+  @freeze_time("2020-11-11 00:00:00")
+  def test_exec_all(self, firestore):
+    userId = "user1"
+    projects = Projects(firestore, userId)
+    active_projects = projects.get_projects(userId)
+    for project in active_projects:
+      job = projects.get_job(project.to_dict())
+      assert job.from_time == datetime(2020,11,8,0,0,0)
+      assert job.to_time == datetime(2020, 11, 9, 0, 0, 0)
+      assert job.valid
+      projects.update_project_exec(project, job)
+    freezer = freeze_time("2020-11-12 00:00:00")
+    active_projects = projects.get_projects(userId)
+    for project in active_projects:
+      job = projects.get_job(project.to_dict())
+      assert job.from_time == datetime(2020,11,9,0,0,0)
+      assert job.to_time == datetime(2020, 11, 10, 0, 0, 0)
+      assert job.valid
+      projects.update_project_exec(project, job)
+    now = datetime.now()
+    active_projects = projects.get_projects(userId)
+    for project in active_projects:
+      job = projects.get_job(project.to_dict())
+      assert not job.valid
 
-
-  @mongomock.patch(servers=(('example.com', 27017),))
-  @elasticmock
-  def test_transfer_with_project(self):
-    pass
+  # @mongomock.patch(servers=(('example.com', 27017),))
+  # @elasticmock
+  # def test_transfer_with_project(self):
+  #   pass
 
 
   
