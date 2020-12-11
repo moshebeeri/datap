@@ -9,10 +9,10 @@ from datetime import datetime
 
 class TestControlBuilders:
 
-  @mongomock.patch(servers=(('mongodb.server.example.com', 27017),))
+  @mongomock.patch(servers=(('example.com', 27017),))
   def test_control_builders(self):
     control = Control({'retryable': False})
-    builder = control.add_source(MongoDB()).add_destination(Elasticsearch())
+    builder = control.add_source(MongoDB(connection = 'example.com')).add_destination(Elasticsearch())
     assert builder != None
     builder.add_transform('2', None)
     builder.add_transform('1', None)
