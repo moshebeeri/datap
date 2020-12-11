@@ -53,6 +53,12 @@ class TestProjects:
     assert len(list(active)) == 1
 
   @freeze_time("2020-11-11 00:00:00")
+  def test_time_freeze(self):
+    freezer = freeze_time("2020-11-12 00:00:00")
+    freezer.start()
+    assert datetime(2020, 11, 12) == datetime.now()
+
+  @freeze_time("2020-11-11 00:00:00")
   def test_exec_all(self, firestore):
     userId = "user1"
     projects = Projects(firestore, userId)
@@ -61,26 +67,29 @@ class TestProjects:
       job = projects.get_job(project.to_dict())
       assert job.from_time == datetime(2020,11,8,0,0,0)
       assert job.to_time == datetime(2020, 11, 9, 0, 0, 0)
-      assert job.valid
       projects.update_project_exec(project, job)
-    freezer = freeze_time("2020-11-12 00:00:00")
+   
     active_projects = projects.get_projects(userId)
     for project in active_projects:
       job = projects.get_job(project.to_dict())
       assert job.from_time == datetime(2020,11,9,0,0,0)
       assert job.to_time == datetime(2020, 11, 10, 0, 0, 0)
-      assert job.valid
       projects.update_project_exec(project, job)
-    now = datetime.now()
+
     active_projects = projects.get_projects(userId)
     for project in active_projects:
       job = projects.get_job(project.to_dict())
-      assert not job.valid
+      assert job.from_time == datetime(2020,11,10,0,0,0)
+      assert job.to_time == datetime(2020, 11, 10, 12, 0, 0)
+      projects.update_project_exec(project, job)
 
-  # @mongomock.patch(servers=(('example.com', 27017),))
-  # @elasticmock
-  # def test_transfer_with_project(self):
-  #   pass
+    freeze_time("2020-11-12 00:00:00").start()
+    active_projects = projects.get_projects(userId)
+    for project in active_projects:
+      job = projects.get_job(project.to_dict())
+      assert job.from_time == datetime(2020, 11, 10, 12, 0, 0)
+      assert job.to_time == datetime(2020, 11, 11, 12, 0, 0)
+      projects.update_project_exec(project, job)
 
 
   

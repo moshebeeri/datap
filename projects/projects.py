@@ -36,7 +36,7 @@ class Projects():
     proj_ref.update({
       'ended': datetime.now(tz.tzutc()),
       'to': job.to_time + timedelta(seconds=data['interval']),
-      'from': job.from_time + timedelta(seconds=data['interval'])
+      'from': job.to_time
       })
 
   def halt_project(self, project_id):
