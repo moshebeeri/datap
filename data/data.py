@@ -1,13 +1,15 @@
 class Data():
   docs = []
-  def __init__(self):
-    pass
+
+  def __init__(self, docs=[]):
+    self.docs = docs
 
   def add_doc(self, doc):
     self.docs.append(doc)
 
-  def get_docs(self):
+  def set_docs(self, docs=[]):
+    self.docs = docs
     return self.docs
 
-  def clear(self):
-    self.docs = []
+  def get_docs(self):
+    return self.docs

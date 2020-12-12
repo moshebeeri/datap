@@ -32,4 +32,9 @@ class MongoDB(Service):
     return data
 
   def write(self, data: Data, job: Job) -> Data:
-    pass
+    docs = data.get_docs()
+    result = self.collection.insert_many(docs)
+    in_ids = result.inserted_ids
+    for i in range(len(in_ids)):
+      docs[i]['_id'] = in_ids[i]
+    return data.set_docs(docs)
