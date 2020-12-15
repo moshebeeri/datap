@@ -9,21 +9,6 @@ from datetime import datetime
 import elasticsearch
 import unittest
 
-
-class ElasticService:
-
-    def __init__(self):
-        self.es = elasticsearch.Elasticsearch(hosts=[{'host': 'localhost', 'port': 9200}])
-
-    def create(self, index, body):
-        es_object = self.es.index(index, body)
-        return es_object.get('_id')
-
-    def read(self, index, id):
-        es_object = self.es.get(index, id)
-        return es_object.get('_source')
-
-
 class TestControl(unittest.TestCase):
 
   def populate_many(self, json_store):
@@ -57,7 +42,7 @@ class TestControl(unittest.TestCase):
         'foo': 'bar'
     }
     # Instantiate service
-    service = ElasticService()
+    service = Elasticsearch()
     # Index document on ElasticSearch
     id = service.create(index, expected_document)
     self.assertIsNotNone(id)

@@ -36,6 +36,7 @@ class TestProjects:
       }, {
         'type': 'elasticsearch',
         'host': 'elastic.com',
+        'port': 9200,
         'user': 'admin',
         'password': 'password'
       },

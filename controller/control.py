@@ -33,6 +33,6 @@ class Control:
       ret.append(key)
     return ret
 
-  def run(self, project=None):
-    data = self.source.read(job=None)
-    return self.destination.write(data, None)
+  def run(self, job=None):
+    data = self.source.read(job=job)
+    return self.destination.write(data, job=job)
