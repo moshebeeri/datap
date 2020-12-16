@@ -1,4 +1,3 @@
-from service import MongoDB
 from service import Elasticsearch
 from controller import Control
 import mongomock
@@ -6,6 +5,7 @@ from elasticmock import elasticmock
 from datetime import datetime
 from freezegun import freeze_time
 from datetime import datetime
+from service.mongodb import MongoDB
 
 class TestControlBuilders:
 

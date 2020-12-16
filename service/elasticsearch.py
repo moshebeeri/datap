@@ -1,20 +1,20 @@
-from .service import Service
 from data import Data
 import elasticsearch
 from projects import Job
+from .service import *
 
 class Elasticsearch(Service):
   
-  def __init__(self, index='default', connection=[{'host': 'localhost', 'port': 9200}]):
+  def __init__(self, index='default', hosts=[{'host': 'localhost', 'port': 9200}]):
     self.index = index
-    self.connect()
+    self.connect(hosts)
 
   def connect(self, hosts=[{'host': 'localhost', 'port': 9200}]):
     self.es = elasticsearch.Elasticsearch(hosts=hosts)
 
   def read(self, job: Job) -> Data:
     data = Data()
-    res = es.search(index="test-index", body={
+    res = self.es.search(index=self.index, body={
       "query": {
         #"match_all": {}
         "range": {

@@ -4,8 +4,7 @@ from _datetime import timedelta
 import json
 from freezegun import freeze_time
 from .job import Job
-from service import MongoDB
-from service import Elasticsearch
+from service import *
 
 class Projects():
   def __init__(self, firestore_client, user_id):

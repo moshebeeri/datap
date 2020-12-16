@@ -1,8 +1,9 @@
-from .service import Service
 from data import Data
 from projects import Job
 import pymongo
 import json
+from .service import *
+
 
 class MongoDB(Service):
   def __init__(self, db='source', collection='default', connection = 'mongodb://localhost:27017/'):
@@ -32,7 +33,8 @@ class MongoDB(Service):
 
   def write(self, data: Data, job: Job) -> Data:
     docs = data.get_docs()
-    result = self.collection.insert_many(docs)
+    col = self.db_collection()
+    result = col.insert_many(docs)
     in_ids = result.inserted_ids
     for i in range(len(in_ids)):
       docs[i]['_id'] = in_ids[i]
