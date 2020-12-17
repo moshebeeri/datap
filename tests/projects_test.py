@@ -1,6 +1,6 @@
 import pytest
-from service import MongoDB
-from projects import Projects
+from service.mongodb import MongoDB
+from projects.projects import Projects
 import mongomock
 from elasticmock import elasticmock
 from datetime import datetime

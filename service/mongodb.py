@@ -1,5 +1,5 @@
 from data import Data
-from projects import Job
+from projects.job import Job
 import pymongo
 import json 
 from .druid import Druid

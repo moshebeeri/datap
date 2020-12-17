@@ -1,5 +1,5 @@
-from service import MongoDB
-from service import Elasticsearch
+from service.mongodb import MongoDB
+from service.elasticsearch import Elasticsearch
 from controller import Control
 import mongomock
 from elasticmock import elasticmock

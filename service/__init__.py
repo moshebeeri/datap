@@ -1,5 +1,5 @@
-from .service import *
+from .service import Service
 from .mongodb import MongoDB
-from .elasticsearch import *
-from .druid import *
+from .elasticsearch import Elasticsearch
+from .druid import Druid
 

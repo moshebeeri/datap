@@ -1,6 +1,6 @@
 from data import Data
 import elasticsearch
-from projects import Job
+from projects.job import Job
 from .service import *
 
 class Elasticsearch(Service):

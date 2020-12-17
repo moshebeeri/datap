@@ -2,9 +2,10 @@ from datetime import datetime
 from dateutil import tz
 from _datetime import timedelta
 import json
-from freezegun import freeze_time
 from .job import Job
-from service import *
+from .factory import ServiceFactory
+# from service.mongodb import MongoDB
+# from service.elasticsearch import Elasticsearch
 
 class Projects():
   def __init__(self, firestore_client, user_id):
@@ -18,21 +19,8 @@ class Projects():
     return self.projects.where('user_id', '==', user_id).where('active', 'in', active).stream()
 
   def create_service(self, project_config):
-    type_ = project_config['type']
-    if type_ == 'mongodb':
-      print('mongodb service created')
-      mongodb = MongoDB(connection=project_config['connection'])
-      return mongodb
-
-    if type_ == 'elastic':
-      print('elastic service created')
-      elastic = Elasticsearch(index=project_config.index, connection=project_config.connection)
-      return elastic
-
-    if type_ == 'sqlite':
-      print('sqlite service created')
-
-
+    sf = ServiceFactory()
+    return sf.create_service(project_config)
 
   def load_project(self, project):
     #self.source = self.create_service(project['source'])

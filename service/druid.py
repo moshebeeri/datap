@@ -1,4 +1,4 @@
-from service import Service
+from service.service import Service
 from projects.job import Job
 from data.data import Data
 

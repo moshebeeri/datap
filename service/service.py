@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from data.data import Data
-from projects import Job
+from projects.job import Job
 
 class Service(ABC):
 
