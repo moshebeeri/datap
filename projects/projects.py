@@ -17,12 +17,11 @@ class Projects():
     active = [True] if active_only else [True, False]
     return self.projects.where('user_id', '==', user_id).where('active', 'in', active).stream()
 
-
   def create_service(self, project_config):
-    type_ = project_config.type
+    type_ = project_config['type']
     if type_ == 'mongodb':
       print('mongodb service created')
-      mongodb = MongoDB(connection=project_config.connection)
+      mongodb = MongoDB(connection=project_config['connection'])
       return mongodb
 
     if type_ == 'elastic':
@@ -36,8 +35,9 @@ class Projects():
 
 
   def load_project(self, project):
-    self.source = self.create_service(project.source)
-    self.destination = self.create_service(project.destination)
+    #self.source = self.create_service(project['source'])
+    #self.destination = self.create_service(project.destination)
+    pass
 
   def create_project(self, user_id, source, destination, start, interval=24*60*60, seconds_to_keep=365*24*60*60, active=True):
     project = {'user_id': user_id, 
@@ -48,8 +48,8 @@ class Projects():
                'source':source,
                'destination': destination
               }
-    load_project(project)
     ref = self.projects.add(project)
+    self.load_project(project)
     return ref[1].id
 
 

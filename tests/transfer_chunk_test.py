@@ -42,13 +42,14 @@ class TestControl(unittest.TestCase):
         'foo': 'bar'
     }
     # Instantiate service
-    service = Elasticsearch()
+    service = Elasticsearch(index=index)
     # Index document on ElasticSearch
-    id = service.create(index, expected_document)
+    doc = service.es.index(index, expected_document)
+    id = doc.get('_id')
     self.assertIsNotNone(id)
     # Retrive document from ElasticSearch
-    document = service.read(index, id)
-    self.assertEqual(expected_document, document)
+    document = service.es.get(index, id)
+    self.assertEqual(expected_document, document['_source'])
 
   @mongomock.patch(servers=(('example.com', 27017),))
   @elasticmock
@@ -60,6 +61,5 @@ class TestControl(unittest.TestCase):
 
     control = control.add_source(mongodb).add_destination(Elasticsearch())
     assert control != None
-    data = control.run()
-    docs = data.get_docs()
+    docs = control.run()
     assert len(docs) == 100
