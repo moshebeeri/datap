@@ -29,16 +29,10 @@ class TestProjects:
     start = datetime.now() - timedelta(days=3)
     ref = projects.create_project(userId, {
       'type': 'mongodb',
-      'host': 'example.com',
-      'port': 27017,
-      'user': 'admin',
-      'password': 'password'
+      'connection': 'example.com:27017',
       }, {
         'type': 'elasticsearch',
-        'host': 'elastic.com',
-        'port': 9200,
-        'user': 'admin',
-        'password': 'password'
+        'connection': 'elastic.com:9200',
       },
       start=start,
       seconds_to_keep=12 * 60 * 60

@@ -18,14 +18,10 @@ class Projects():
     active = [True] if active_only else [True, False]
     return self.projects.where('user_id', '==', user_id).where('active', 'in', active).stream()
 
-  def create_service(self, project_config):
+  def create_services(self, project):
     sf = ServiceFactory()
-    return sf.create_service(project_config)
-
-  def load_project(self, project):
-    #self.source = self.create_service(project['source'])
-    #self.destination = self.create_service(project.destination)
-    pass
+    self.source = sf.create_service(project['source'])
+    self.destination = sf.create_service(project['destination'])
 
   def create_project(self, user_id, source, destination, start, interval=24*60*60, seconds_to_keep=365*24*60*60, active=True):
     project = {'user_id': user_id, 
@@ -37,7 +33,7 @@ class Projects():
                'destination': destination
               }
     ref = self.projects.add(project)
-    self.load_project(project)
+    self.create_services(project)
     return ref[1].id
 
 
