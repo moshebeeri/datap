@@ -3,8 +3,8 @@ from data.data import Data
 from projects.job import Job
 
 class Service(ABC):
-
-  def __init__(self, start, end, chunk_size=1024):
+  
+  def __init__(self, start, end, type='nosql', chunk_size=1024):
     super().__init__()
 
   @abstractmethod

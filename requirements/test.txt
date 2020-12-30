@@ -7,3 +7,4 @@ freezegun
 elasticmock
 mongomock
 mock-firestore
+moto

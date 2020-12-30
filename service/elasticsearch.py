@@ -5,33 +5,30 @@ from .service import *
 
 class Elasticsearch(Service):
   
-  def __init__(self, index='default', hosts=[{'host': 'localhost', 'port': 9200}]):
+  def __init__(self, index='default', hosts=[{'host': 'localhost', 'port': 9200}], timestamp_name='timestamp'):
     self.index = index
     self.connect(hosts)
 
-  def connect(self, hosts=[{'host': 'localhost', 'port': 9200}]):
-    self.es = elasticsearch.Elasticsearch(hosts=hosts)
+  def connect(self, connection={'hosts': [{'host': 'localhost', 'port': 9200}]}):
+    self.es = elasticsearch.Elasticsearch(hosts=connection['host'])
 
   def read(self, job: Job) -> Data:
     data = Data()
-    res = self.es.search(index=self.index, body={
+    timestamp: {
+      "gte": job.from_time,
+      "lt": job.to_time
+    }
+    body={
       "query": {
-        #"match_all": {}
         "range": {
-          "timestamp": {
-            "gte": job.from_time,
-            "lt": job.to_time
-          }
         }
       }
-    })
+    }
+    body["query"]["range"][timestamp_name] = timestamp
+    res = self.es.search(index=self.index, body=body)
     hits = res['hits']['hits']
-    # for num, doc in enumerate(hits):
-    #   data.add_doc(doc)
     for doc in res['hits']['hits']:
       data.add_doc(doc)
-      #print("%s) %s" % (doc['_id'], doc['_source']['content']))
-
     return data
 
   def write(self, data: Data, job: Job) -> Data:

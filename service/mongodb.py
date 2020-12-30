@@ -2,7 +2,6 @@ from data import Data
 from projects.job import Job
 import pymongo
 import json 
-from .druid import Druid
 from .service import Service
 class MongoDB(Service):
   def __init__(self, db='source', collection='default', connection = 'mongodb://localhost:27017/'):
