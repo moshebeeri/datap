@@ -10,7 +10,7 @@ class Elasticsearch(Service):
     self.connect(hosts)
 
   def connect(self, connection={'hosts': [{'host': 'localhost', 'port': 9200}]}):
-    self.es = elasticsearch.Elasticsearch(hosts=connection['host'])
+    self.es = elasticsearch.Elasticsearch(hosts=connection['hosts'])
 
   def read(self, job: Job) -> Data:
     data = Data()
