@@ -5,16 +5,17 @@ from .service import *
 
 class Elasticsearch(Service):
   
-  def __init__(self, index='default', hosts=[{'host': 'localhost', 'port': 9200}], timestamp_name='timestamp'):
+  def __init__(self, index='default', connection={'hosts': [{'host': 'localhost', 'port': 9200}]}, timestamp_name='timestamp'):
     self.index = index
-    self.connect(hosts)
+    self.timestamp_name = timestamp_name
+    self.connect(connection)
 
   def connect(self, connection={'hosts': [{'host': 'localhost', 'port': 9200}]}):
     self.es = elasticsearch.Elasticsearch(hosts=connection['hosts'])
 
   def read(self, job: Job) -> Data:
     data = Data()
-    timestamp: {
+    timestamp = {
       "gte": job.from_time,
       "lt": job.to_time
     }
@@ -24,7 +25,7 @@ class Elasticsearch(Service):
         }
       }
     }
-    body["query"]["range"][timestamp_name] = timestamp
+    body["query"]["range"][self.timestamp_name] = timestamp
     res = self.es.search(index=self.index, body=body)
     hits = res['hits']['hits']
     for doc in res['hits']['hits']:

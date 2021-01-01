@@ -8,6 +8,7 @@ from datetime import datetime
 import elasticsearch
 import unittest
 from service import *
+from projects.job import Job
 
 
 class TestElasticToMongo(unittest.TestCase):
