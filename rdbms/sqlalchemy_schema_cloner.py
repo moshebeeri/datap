@@ -5,17 +5,23 @@ from sqlalchemy import create_engine, Table, Column, Integer, Unicode, MetaData,
 
 #see https://gist.github.com/pawl/9935333
 class AlchemyTableClone:
-  def clone(self):
+  ###
+  # Source and Destination should be of the following form:
+  #{
+  #   engine: 'SQLAlchemy Engine'
+  #   table: 'the_table_name'
+  # }
+  def clone(self, source, destination):
     # create engine, reflect existing columns, and create table object for oldTable
-    srcEngine = create_engine('mysql+mysqldb://username:password@111.111.111.111/database') # change this for your source database
+    srcEngine = source['engine']
     srcEngine._metadata = MetaData(bind=srcEngine)
     srcEngine._metadata.reflect(srcEngine) # get columns from existing table
-    srcTable = Table('oldTable', srcEngine._metadata)
+    srcTable = Table(source['table'], srcEngine._metadata)
 
     # create engine and table object for newTable
-    destEngine = create_engine('mysql+mysqldb://username:password@localhost/database') # change this for your destination database
+    destEngine = destination['engine']
     destEngine._metadata = MetaData(bind=destEngine)
-    destTable = Table('newTable', destEngine._metadata)
+    destTable = Table(destination['table'], destEngine._metadata)
 
     # copy schema and create newTable from oldTable
     for column in srcTable.columns:

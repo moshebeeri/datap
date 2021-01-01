@@ -16,8 +16,9 @@ class AlchemyEngineFactory:
   def sqlite(self, file_path_name):
     return create_engine('sqlite://' + file_path_name, echo=True)
 
-  def mysql(self):
-    pass
+  def mysql(self, username, password, url, database):
+    return create_engine('mysql+mysqldb://'+username+':'+password+'@'+url+'/'+database) 
+
 
   # https://stackoverflow.com/questions/46328762/connecting-to-amazon-aurora-using-sqlalchemy
   def rds(self, protocol, user, host, port, database):
