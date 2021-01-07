@@ -5,12 +5,11 @@ from sqlalchemy import create_engine, MetaData
 from sqlalchemy import Column, Integer, String, Table
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy import text
-from sqlalchemy import bindparam
+from sqlalchemy import text, bindparam
 
 
 class AlchemyEngineFactory:
-  def sqlite_inmemory(self):
+  def sqlite_in_memory(self):
     return self.sqlite('/:memory:')
 
   def sqlite(self, file_path_name):
@@ -41,9 +40,6 @@ class AlchemyEngineFactory:
     # kw.update({'sslmode': 'verify-full', 'sslrootcert /path/to/pem-file.pem})  # PostgreSQL
 
     return  create_engine(conn_str, connect_args=kw)
-    # session = sessionmaker(engine)
-    # return session
-
   
   def query_example(self):
     from sqlalchemy import create_engine, select, MetaData, Table
@@ -59,18 +55,5 @@ class AlchemyEngineFactory:
     for result in results:
         print(result)
     
-    with engine.connect() as connection:
-      result = connection.execute(text("select username from users"))
-      for row in result:
-          print("username:", row['username'])
-
-      # the best way is given by
-      # https://docs.sqlalchemy.org/en/14/core/tutorial.html#using-textual-sql
-      stmt = text("SELECT * FROM users WHERE users.name BETWEEN :x AND :y")
-      stmt = stmt.bindparams(x="m", y="z")
-      # The parameters can also be explicitly typed:
-
-      stmt = stmt.bindparams(bindparam("x", type_=String), bindparam("y", type_=String))
-      result = connection.execute(stmt, {"x": "m", "y": "z"})
 
 

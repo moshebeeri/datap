@@ -1,5 +1,6 @@
 class Data():
   docs = []
+  meta = {}
 
   def __init__(self, docs=[]):
     self.docs = docs
@@ -13,3 +14,7 @@ class Data():
 
   def get_docs(self):
     return self.docs
+
+  def add(self, key, value):
+    meta[key] = value
+    return self.meta
