@@ -19,7 +19,7 @@ class SQLiteDB(Service):
     self.connect(connection)
 
   def connect(self):
-    connection='file::memory:?cache=shared'
+    # connection='file::memory:?cache=shared'
     pass
 
   def alchemy(self):
