@@ -43,13 +43,20 @@ class SQLiteDB(Service):
       result = conn.execute(stmt)
       for doc in result:
           data.add_doc(doc)
+      conn.close()
     return data
 
   def write(self, data: Data, job: Job) -> Data:
     docs = data.get_docs()
-    # col = self.db_collection()
-    # result = col.insert_many(docs)
-    # in_ids = result.inserted_ids
-    # for i in range(len(in_ids)):
-    #   docs[i]['_id'] = in_ids[i]
+    with sqlite3.connect(self.connection_str) as conn:
+      c = conn.cursor()
+      #records or rows in a list
+      records = []
+      for doc in docs:
+        columns = ', '.join(doc.keys())
+        values = ':' + ', :'.join(doc.values())
+        query = 'INSERT INTO %s (%s) VALUES (%s)' % (self.table_name, columns, values)
+        c.execute(query, doc)
+      c.commit()
+      conn.close()
     return data.set_docs(docs)
