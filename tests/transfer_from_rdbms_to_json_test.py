@@ -21,7 +21,7 @@ class TestData(Base):
 
   id = Column(Integer, primary_key=True)
   number = Column(Integer)  
-  timestamp = Column(DateTime, default=datetime.datetime.utcnow)
+  timestamp = Column(DateTime, default=datetime.utcnow)
 
   def __repr__(self):
      return "<User(number='%d', timestamp='%s')>" % (self.number, str(self.timestamp))

@@ -16,8 +16,8 @@ class Elasticsearch(Service):
   def read(self, job: Job) -> Data:
     data = Data()
     timestamp = {
-      "gte": job.from_time,
-      "lt": job.to_time
+      "gte": str(job.from_time),
+      "lt": str(job.to_time)
     }
     body={
       "query": {

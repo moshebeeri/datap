@@ -1,6 +1,6 @@
 -r dev.txt
 
-pytest
+pytest>=5.0
 mock
 pytest_mock
 freezegun
