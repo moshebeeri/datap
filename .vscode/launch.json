@@ -11,6 +11,12 @@
       "program": "${file}",
       "console": "integratedTerminal",
       "args": ["--dry", "True"]
-    }
+    },{
+      "name": "Debug Tests",
+      "type": "python",
+      "request": "test",
+      "console": "integratedTerminal",
+      "justMyCode": false
+  }
   ]
 }

@@ -18,12 +18,13 @@ class SQLiteDB(Service):
 
   def read(self, job: Job) -> Data:
     data = Data()
-    desc = '.schema ' + self.table
-    create_schema = self.conn.execute(desc)
-    create_schema_stmt = job.set_create_schema(create_schema)
-    data.add('create schema statement', create_schema_stmt)
-    stmt = 'SELECT * FROM {} WHERE {} BETWEEN {} AND {}'.format(self.table, self.timestamp_name, job.from_time, job.to_time)
-    result = conn.execute(stmt)
+    # desc = '.schema ' + self.table
+    # create_schema = self.conn.execute(desc)
+    # create_schema_stmt = job.set_create_schema(create_schema)
+    # data.add('create schema statement', create_schema_stmt)
+    # stmt = 'SELECT * FROM {} WHERE {} BETWEEN "{}" AND "{}"'.format(self.table, self.timestamp_name, job.from_time, job.to_time)
+    stmt = 'SELECT * FROM {}'.format(self.table)
+    result = self.conn.execute(stmt)
     for doc in result:
         data.add_doc(doc)
     return data

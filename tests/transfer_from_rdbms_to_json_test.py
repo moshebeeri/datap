@@ -46,7 +46,7 @@ class TestSQLiteToMongo(TestCase):
   @mongomock.patch(servers=(('example.com', 27017),))
   def test_transfer_elastic_to_mongo(self):
     control = Control({'retryable': False})
-    sqlite = SQLite()
+    sqlite = SQLiteDB()
     # elastic = Elasticsearch(index='my_data')
     # self.elastic_populate_many(elastic)
     mongodb = MongoDB(connection = 'example.com')

@@ -39,7 +39,7 @@ class SQLiteToMongoTest(TestCase):
     for i in range(100):
       insert_stm = "INSERT INTO projects (name) VALUES('name_" + str(i) + "')"
       c.execute(insert_stm)
-    c.commit()
+    conn.commit()
 
   @mongomock.patch(servers=(('example.com', 27017),))
   def test_transfer_elastic_to_mongo(self):
